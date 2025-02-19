@@ -10,4 +10,6 @@ import java.util.List;
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, Integer> {
     @Query("select hdct from HoaDonChiTiet  hdct where hdct.idHoaDon.id = :idhdct")
     List<HoaDonChiTiet> getByIDHoaDon(@RequestParam("idhdct") Integer idhdct);
+
+    //an cuc cut
 }
