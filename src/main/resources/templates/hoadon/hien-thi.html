@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Danh sách hóa đơn</title>
+  <!-- Link Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+
+<h2 class="text-center mb-4">Danh sách hóa đơn</h2>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark text-center">
+  <tr>
+    <th>Id</th>
+    <th>Tên khách hàng</th>
+    <th>Ngày mua</th>
+    <th>Trạng thái</th>
+    <th>Hành động</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:each="hd : ${listHoaDon}">
+    <tr>
+      <td class="text-center" th:text="${hd.id}"></td>
+      <td th:text="${hd.idKhachHang.ten}"></td>
+      <td class="text-center" th:text="${#dates.format(hd.ngayMuaHang, 'dd/MM/yyyy')}"></td>
+      <td class="text-center">
+          <span th:class="${hd.trangThai} ? 'badge bg-success' : 'badge bg-danger'"
+                th:text="${hd.trangThai} ? 'Đã thanh toán' : 'Chưa thanh toán'">
+          </span>
+      </td>
+      <td class="text-center">
+        <a th:href="@{|/hoa-don/detail/${hd.id}|}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+      </td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+
+<!-- Link Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

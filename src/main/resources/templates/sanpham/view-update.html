@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/san-pham/update" method="post">
+    ID: <input type="hidden" name="id" th:value="${sp?.id}"> <br>
+    Mã: <input type="text" name="ma" th:value="${sp?.ma}"> <br>
+    Tên: <input type="text" name="ten" th:value="${sp?.ten}"> <br>
+    Trạng thái:
+    <input type="radio" name="trangThai" value="true" th:checked="${sp?.trangThai == true}"> Đang hoạt động
+    <input type="radio" name="trangThai" value="false" th:checked="${sp?.trangThai == false}"> Ngừng hoạt động <br>
+    <button>Update</button>
+</form>
+</body>
+</html>

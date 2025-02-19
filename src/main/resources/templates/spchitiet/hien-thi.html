@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/san-pham-chi-tiet/add" method="post">
+    <label for="maSpct">Mã SpChiTiet:</label>
+    <input type="text" id="maSpct" name="maSpct" th:value="${spChiTiet?.maSpct}" required> <br>
+
+    <label for="idMauSac">Tên Màu Sắc:</label>
+    <select id="idMauSac" name="idMauSac" required>
+        <option th:each="mauSac : ${listMauSac}"
+                th:value="${mauSac.id}"
+                th:text="${mauSac.ten}"
+                th:selected="${spChiTiet?.idMauSac?.id == mauSac.id}">
+        </option>
+    </select>
+    <br>
+
+    <label for="idKichThuoc">Tên Kích Thước:</label>
+    <select id="idKichThuoc" name="idKichThuoc" required>
+        <option th:each="kichThuoc : ${listKichThuoc}"
+                th:value="${kichThuoc.id}"
+                th:text="${kichThuoc.ten}"
+                th:selected="${spChiTiet?.idKichThuoc?.id == kichThuoc.id}">
+        </option>
+    </select>
+    <br>
+
+    <label for="idSanPham">Tên Sản phẩm:</label>
+    <select id="idSanPham" name="idSanPham" required>
+        <option th:each="sanPham : ${listSanPham}"
+                th:value="${sanPham.id}"
+                th:text="${sanPham.ten}"
+                th:selected="${spChiTiet?.idSanPham?.id == sanPham.id}">
+        </option>
+    </select>
+    <br>
+
+    <label for="soLuong">Số lượng:</label>
+    <input type="number" id="soLuong" name="soLuong" th:value="${spChiTiet?.soLuong}" min="1" required> <br>
+
+    <label for="donGia">Đơn giá:</label>
+    <input type="number" id="donGia" name="donGia" th:value="${spChiTiet?.donGia}" min="0" required> <br>
+
+    <label>Trạng thái:</label>
+    <input type="radio" name="trangThai" value="true" th:checked="${spChiTiet?.trangThai == true}"> Đang hoạt động
+    <input type="radio" name="trangThai" value="false" th:checked="${spChiTiet?.trangThai == false}"> Ngừng hoạt động <br>
+
+    <button type="submit">Lưu</button>
+</form>
+<table>
+    <thead>
+        <th>Id</th>
+        <th>Mã SpChiTiet</th>
+        <th>Tên Màu Sắc</th>
+        <th>Tên Kích thước</th>
+        <th>Tên Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Đơn giá</th>
+        <th>Trạng thái</th>
+    </thead>
+    <tbody>
+        <th:block th:each="spct :${ListSpChiTiet}">
+            <tr>
+                <td th:text="${spct.id}"></td>
+                <td th:text="${spct.maSpct}"></td>
+                <td th:text="${spct.idMauSac.ten}"></td>
+                <td th:text="${spct.idKichThuoc.ten}"></td>
+                <td th:text="${spct.idSanPham.ten}"></td>
+                <td th:text="${spct.soLuong}"></td>
+                <td th:text="${spct.donGia}"></td>
+                <td th:text="${spct.trangThai == true ? 'Đang hoạt động' : 'Ngừng hoạt động'}"></td>
+                <td>
+                    <a th:href="@{|/san-pham-chi-tiet/detail/${spct.id}|}">Xem chi tiết</a>
+                    <a th:href="@{|/san-pham-chi-tiet/delete/${spct.id}|}"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
+                        Xóa
+                    </a>
+                    <a th:href="@{|/san-pham-chi-tiet/update/${spct.id}|}">Sửa</a>
+                </td>
+            </tr>
+        </th:block>
+    </tbody>
+</table>
+</body>
+</html>

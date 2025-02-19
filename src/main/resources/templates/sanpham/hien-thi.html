@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/san-pham/add" method="post">
+  Mã: <input type="text" name="ma" th:value="${sp?.ma}"> <br>
+  Tên: <input type="text" name="ten" th:value="${sp?.ten}"> <br>
+  Trạng thái:
+  <input type="radio" name="trangThai" value="true" th:checked="${sp?.trangThai == true}"> Đang hoạt động
+  <input type="radio" name="trangThai" value="false" th:checked="${sp?.trangThai == false}"> Ngừng hoạt động <br>
+  <button>Thêm</button>
+</form>
+<table>
+  <thead>
+    <th>Id</th>
+    <th>Mã</th>
+    <th>Tên</th>
+    <th>Trạng thái</th>
+  </thead>
+  <tbody>
+    <th:block th:each="sp :${listSanPham}">
+      <tr>
+        <td th:text="${sp.id}"></td>
+        <td th:text="${sp.ma}"></td>
+        <td th:text="${sp.ten}"></td>
+        <td th:text="${sp.trangThai == true ? 'Đang hoạt động' : 'Ngừng hoạt động'}"></td>
+        <td>
+          <a th:href="@{|/san-pham/detail/${sp.id}|}">detail</a>
+          <a th:href="@{|/san-pham/update/${sp.id}|}">update</a>
+          <a th:href="@{|/san-pham/delete?id=${sp.id}|}">delete</a>
+        </td>
+      </tr>
+    </th:block>
+  </tbody>
+</table>
+</body>
+</html>

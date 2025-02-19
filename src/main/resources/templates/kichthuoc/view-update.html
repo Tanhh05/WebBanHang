@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/kich-thuoc/update" method="post">
+    Id: <input type="hidden" name="id" th:value="${kt?.id}">
+    Mã: <input type="text" name="ma" th:value="${kt?.ma}"> <br>
+    Tên: <input type="text" name="ten" th:value="${kt?.ten}"> <br>
+    Trạng thái:
+    <input type="radio" name="trangThai" value="true" th:checked="${kt?.trangThai == true}"> Đang hoạt động
+    <input type="radio" name="trangThai" value="false" th:checked="${kt?.trangThai == false}"> Ngừng hoạt động <br>
+    <button>Thêm</button>
+</form>
+</body>
+</html>

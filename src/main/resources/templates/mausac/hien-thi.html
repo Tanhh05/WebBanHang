@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/mau-sac/add" method="post">
+    Mã: <input type="text" name="ma" th:value="${ms?.ma}"> <br>
+    Tên: <input type="text" name="ten" th:value="${ms?.ten}"> <br>
+    Trạng thái:
+    <input type="radio" name="trangThai" value="true" th:checked="${ms?.trangThai == true}"> Đang hoạt động
+    <input type="radio" name="trangThai" value="false" th:checked="${ms?.trangThai == false}"> Ngừng hoạt động <br>
+    <button>Thêm</button>
+</form>
+<table>
+    <thead>
+        <th>Id</th>
+        <th>Mã</th>
+        <th>Tên</th>
+        <th>Trạng thái</th>
+    </thead>
+    <tbody>
+        <th:block th:each="ms :${listMauSac}">
+            <tr>
+                <td th:text="${ms.id}"></td>
+                <td th:text="${ms.ma}"></td>
+                <td th:text="${ms.ten}"></td>
+                <td th:text="${ms.trangThai == true ? 'Đang hoạt động' : 'Ngừng hoạt động'}"></td>
+                <td>
+                    <a th:href="@{|/mau-sac/detail/${ms.id}|}">detail</a>
+                    <a th:href="@{|/mau-sac/update/${ms.id}|}">update</a>
+                    <a th:href="@{|/mau-sac/delete?id=${ms.id}|}">delete</a>
+                </td>
+            </tr>
+        </th:block>
+    </tbody>
+</table>
+</body>
+</html>

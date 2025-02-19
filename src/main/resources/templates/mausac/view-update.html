@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/mau-sac/update" method="post">
+    <input type="hidden" name="id" th:value="${ms.id}">
+
+    <label>Mã:</label>
+    <input type="text" name="ma" th:value="${ms.ma}"> <br>
+
+    <label>Tên:</label>
+    <input type="text" name="ten" th:value="${ms.ten}"> <br>
+
+    <label>Trạng thái:</label>
+    <input type="radio" name="trangThai" value="true" th:checked="${ms.trangThai}"> Đang hoạt động
+    <input type="radio" name="trangThai" value="false" th:checked="${!ms.trangThai}"> Ngừng hoạt động
+    <br>
+    <button type="submit">Cập nhật</button>
+</form>
+
+</body>
+</html>

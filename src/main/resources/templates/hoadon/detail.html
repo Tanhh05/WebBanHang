@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết hóa đơn</title>
+    <!-- Link Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f1f3f5;
+        }
+        .invoice-container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .table th {
+            background-color: #007bff;
+            color: white;
+            text-align: left;
+            width: 40%;
+            padding: 10px;
+        }
+        .table td {
+            font-weight: 500;
+            color: #333;
+            padding: 10px;
+        }
+        .btn-custom {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            background: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-custom:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+    <div class="invoice-container">
+        <h2 class="text-center text-primary">🧾 Chi tiết hóa đơn</h2>
+
+        <!-- Hiển thị thông tin chi tiết hóa đơn -->
+        <table class="table table-bordered mt-3">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sản phẩm</th>
+                <th>ID Hóa đơn</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="hdct :${hdChiTiet}">
+                <td th:text="${hdct.id}"></td>
+                <td th:text="${hdct.idSpct.idSanPham.ten}"></td>
+                <td th:text="${hdct.idHoaDon.id}"></td>
+                <td th:text="${hdct.soLuong}"></td>
+                <td th:text="${#numbers.formatDecimal(hdct.donGia, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                <td th:text="${#numbers.formatDecimal(hdct.soLuong * hdct.donGia, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+                <td>
+                    <span th:if="${hdct.trangThai}" class="badge bg-success">Đã thanh toán</span>
+                    <span th:unless="${hdct.trangThai}" class="badge bg-danger">Chưa thanh toán</span>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+
+        <!-- Nút quay lại danh sách hóa đơn -->
+        <a href="/hoa-don/hien-thi" class="btn-custom mt-3">🔙 Quay lại danh sách hóa đơn</a>
+    </div>
+</div>
+
+<!-- Script Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

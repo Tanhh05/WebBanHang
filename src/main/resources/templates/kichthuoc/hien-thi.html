@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/kich-thuoc/add" method="post">
+    Mã: <input type="text" name="ma" th:value="${kt?.ma}"> <br>
+    Tên: <input type="text" name="ten" th:value="${kt?.ten}"> <br>
+    Trạng thái:
+    <input type="radio" name="trangThai" value="true" th:checked="${kt?.trangThai == true}"> Đang hoạt động
+    <input type="radio" name="trangThai" value="false" th:checked="${kt?.trangThai == false}"> Ngừng hoạt động <br>
+    <button>Thêm</button>
+</form>
+<table>
+  <thead>
+    <th>Id</th>
+    <th>Mã</th>
+    <th>Tên</th>
+    <th>Trạng thái</th>
+    <th>Action</th>
+  </thead>
+    <tbody>
+        <th:block th:each="kt :${listKichThuoc}">
+            <tr>
+                <td th:text="${kt.id}"></td>
+                <td th:text="${kt.ma}"></td>
+                <td th:text="${kt.ten}"></td>
+                <td th:text="${kt.trangThai == true ? 'Đang hoạt động' : 'Ngừng hoạt động'}"></td>
+                <td>
+                    <a th:href="@{|/kich-thuoc/detail/${kt.id}|}">detail</a>
+                    <a th:href="@{|/kich-thuoc/update/${kt.id}|}">update</a>
+                    <a th:href="@{|/kich-thuoc/delete?id=${kt.id}|}">delete</a>
+                </td>
+            </tr>
+        </th:block>
+    </tbody>
+</table>
+</body>
+</html>
