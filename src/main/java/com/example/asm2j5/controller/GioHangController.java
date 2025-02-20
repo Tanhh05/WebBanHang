@@ -12,6 +12,7 @@ import com.example.asm2j5.repository.HoaDonRepository;
 import com.example.asm2j5.repository.KhachHangRepository;
 import com.example.asm2j5.repository.RepositoryNhanVien;
 import com.example.asm2j5.repository.RepositorySanPhamChiTiet;
+import com.example.asm2j5.repository.SpChiTietService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/gio-hang")
@@ -33,18 +38,22 @@ public class GioHangController {
     private final RepositorySanPhamChiTiet repositorySanPhamChiTiet;
     private final RepositoryNhanVien repositoryNhanVien;
 
+    private final SpChiTietService spChiTietService;
+
+
     public GioHangController(GioHangService gioHangService,
                              KhachHangRepository khachHangRepository,
                              HoaDonRepository hoaDonRepository,
                              HoaDonChiTietRepository hoaDonChiTietRepository,
                              RepositorySanPhamChiTiet repositorySanPhamChiTiet,
-                             RepositoryNhanVien repositoryNhanVien) {
+                             RepositoryNhanVien repositoryNhanVien, SpChiTietService spChiTietService) {
         this.gioHangService = gioHangService;
         this.khachHangRepository = khachHangRepository;
         this.hoaDonRepository = hoaDonRepository;
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.repositorySanPhamChiTiet = repositorySanPhamChiTiet;
         this.repositoryNhanVien = repositoryNhanVien;
+        this.spChiTietService = spChiTietService;
     }
 
     // Tạo giỏ hàng nếu chưa có
@@ -58,26 +67,40 @@ public class GioHangController {
     }
 
     @PostMapping("/them")
-    public ResponseEntity<List<SanPhamTrongGio>> themVaoGio(@RequestParam Long idSanPham,
-                                                            @RequestParam String tenSanPham,
-                                                            @RequestParam long donGia,
-                                                            @RequestParam String mauSac,
-                                                            @RequestParam String kichThuoc,
-                                                            @RequestParam int soLuong,
-                                                            HttpSession session) {
+    public ResponseEntity<?> themVaoGio(@RequestParam Long idSanPham,
+                                        @RequestParam String tenSanPham,
+                                        @RequestParam long donGia,
+                                        @RequestParam String mauSac,
+                                        @RequestParam String kichThuoc,
+                                        @RequestParam int soLuong,
+                                        HttpSession session) {
+
+        // Kiểm tra giá trị null hoặc trống
+        if (idSanPham == null || tenSanPham.isEmpty() || mauSac.isEmpty() || kichThuoc.isEmpty() || soLuong <= 0) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Dữ liệu không hợp lệ!"));
+        }
 
         List<SanPhamTrongGio> gioHang = layGioHang(session);
 
-        boolean tonTai = false;
-        for (SanPhamTrongGio sp : gioHang) {
-            if (sp.getIdSanPham().equals(idSanPham)) {
-                sp.setSoLuong(sp.getSoLuong() + soLuong);
-                tonTai = true;
-                break;
-            }
+        // Đảm bảo dữ liệu đúng kiểu
+        int soLuongTonKho = spChiTietService.laySoLuongTonKho(idSanPham, mauSac, kichThuoc);
+
+        Optional<SanPhamTrongGio> sanPhamTrongGio = gioHang.stream()
+                .filter(sp -> sp.getIdSanPham().equals(idSanPham)
+                        && sp.getMauSac().equals(mauSac)
+                        && sp.getKichThuoc().equals(kichThuoc))
+                .findFirst();
+
+        int soLuongHienTai = sanPhamTrongGio.map(SanPhamTrongGio::getSoLuong).orElse(0);
+        int tongSoLuong = soLuongHienTai + soLuong;
+
+        if (tongSoLuong > soLuongTonKho) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng sản phẩm vượt quá tồn kho! Chỉ còn " + soLuongTonKho + " sản phẩm."));
         }
 
-        if (!tonTai) {
+        if (sanPhamTrongGio.isPresent()) {
+            sanPhamTrongGio.get().setSoLuong(tongSoLuong);
+        } else {
             gioHang.add(new SanPhamTrongGio(idSanPham, tenSanPham, soLuong, donGia, mauSac, kichThuoc));
         }
 
