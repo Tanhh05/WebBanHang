@@ -95,7 +95,7 @@ public class GioHangController {
         int tongSoLuong = soLuongHienTai + soLuong;
 
         if (tongSoLuong > soLuongTonKho) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng sản phẩm vượt quá tồn kho! Chỉ còn " + soLuongTonKho + " sản phẩm."));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng sản phẩm vượt quá tồn kho!"));
         }
 
         if (sanPhamTrongGio.isPresent()) {
